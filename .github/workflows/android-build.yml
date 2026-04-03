@@ -41,17 +41,15 @@ jobs:
         mkdir -p ~/Qt/5.15.2/android
         cd ~/Qt/5.15.2/android
         
-        # Download Qt for Android prebuilt (using arc.ustc.edu.cn mirror)
-        wget -q https://mirrors.ustc.edu.cn/qtproject/archive/qt/5.15/5.15.2-single/qt-everywhere-opensource-src-5.15.2.tar.xz -O qt-src.tar.xz || exit 1
-        
-        echo "Downloaded Qt source, extracting..."
-        tar -xf qt-src.tar.xz
+        # Download Qt for Android source from Qt archive
+        wget -q "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip" -O qt-src.zip
+        unzip -q qt-src.zip
         
         echo "Building Qt (this takes a while)..."
-        cd qt-everywhere-opensource-src-5.15.2
+        cd qt-everywhere-src-5.15.2
         
         ./configure -xplatform android-clang \
-          -prefix $HOME/Qt/5.15.2/android \
+          -prefix ~/Qt/5.15.2/android \
           -nomake examples -nomake tests \
           -skip qtwebkit -skip qtwebengine \
           -ANDROID_NDK_HOST=linux-x86_64 \
