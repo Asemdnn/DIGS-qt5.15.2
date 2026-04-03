@@ -45,21 +45,21 @@ jobs:
         wget -q "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip" -O qt-src.zip
         unzip -q qt-src.zip
         
-        echo "Building Qt..."
+        echo "Fixing line endings..."
         cd qt-everywhere-src-5.15.2
+        # Fix line endings on ALL shell scripts recursively
+        find . -name "configure" -o -name "*.sh" | while read f; do sed -i 's/\r$//' "$f" 2>/dev/null; done
+        find . -type f -name "configure" -exec chmod +x {} \;
         
-        # Fix line endings (Windows CRLF -> Unix LF)
-        sed -i 's/\r$//' configure
-        chmod +x configure
+        echo "Building Qt..."
         
-        # Run configure with bash explicitly
         bash ./configure -xplatform android-clang \
           -prefix ~/Qt/5.15.2/android \
           -nomake examples -nomake tests \
           -skip qtwebkit -skip qtwebengine \
           -ANDROID_NDK_HOST=linux-x86_64 \
           -ANDROID_NDK_PLATFORM=android-21 \
-          -ANDROID_SDK_ROOT=$ANDROID_HOME || exit 1
+          -ANDROID_SDK_ROOT=$ANDROID_HOME || { cat config.log; exit 1; }
         
         make -j$(nproc) || exit 1
         make install || exit 1
