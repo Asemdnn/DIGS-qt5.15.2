@@ -27,7 +27,7 @@ message(Qt version $$[QT_VERSION])
 
 include(QGCCommon.pri)
 
-TARGET   = QGroundControl
+TARGET   = DIGS
 TEMPLATE = app
 QGCROOT  = $$PWD
 
@@ -37,38 +37,19 @@ QML_IMPORT_PATH += $$PWD/src/QmlControls
 # OS Specific settings
 #
 
-MacBuild {
-    QMAKE_INFO_PLIST    = Custom-Info.plist
-    ICON                = $${SOURCE_DIR}/resources/icons/macx.icns
-    OTHER_FILES        += Custom-Info.plist
-    LIBS               += -framework ApplicationServices
-}
-
-LinuxBuild {
-    CONFIG  += qesp_linux_udev
-}
-
-WindowsBuild {
-    RC_ICONS = resources/icons/qgroundcontrol.ico
-    CONFIG += resources_big
-}
+# Android-only build - other platform settings removed
 
 #
 # Branding
 #
 
-QGC_APP_NAME        = "QGroundControl"
-QGC_ORG_NAME        = "QGroundControl.org"
-QGC_ORG_DOMAIN      = "org.qgroundcontrol"
-QGC_APP_DESCRIPTION = "Open source ground control app provided by QGroundControl dev team"
-QGC_APP_COPYRIGHT   = "Copyright (C) 2019 QGroundControl Development Team. All rights reserved."
+QGC_APP_NAME        = "DIGS"
+QGC_ORG_NAME        = "JIACDI"
+QGC_ORG_DOMAIN      = "com.jiacdi"
+QGC_APP_DESCRIPTION = "Drone Inspection Ground Station"
+QGC_APP_COPYRIGHT   = "Copyright (C) 2024 JIACDI. All rights reserved."
 
-WindowsBuild {
-    QGC_INSTALLER_SCRIPT        = "$$SOURCE_DIR\\deploy\\windows\\nullsoft_installer.nsi"
-    QGC_INSTALLER_ICON          = "$$SOURCE_DIR\\deploy\\windows\\WindowsQGC.ico"
-    QGC_INSTALLER_HEADER_BITMAP = "$$SOURCE_DIR\\deploy\\windows\\installheader.bmp"
-    QGC_INSTALLER_DRIVER_MSI    = "$$SOURCE_DIR\\deploy\\windows\\driver.msi"
-}
+# Windows installer configs removed (Android-only)
 
 # Load additional config flags from user_config.pri
 exists(user_config.pri):infile(user_config.pri, CONFIG) {
@@ -104,43 +85,11 @@ contains (CONFIG, QGC_DISABLE_CUSTOM_BUILD) {
     }
 }
 
-WindowsBuild {
-    # Sets up application properties
-    QMAKE_TARGET_COMPANY        = "$${QGC_ORG_NAME}"
-    QMAKE_TARGET_DESCRIPTION    = "$${QGC_APP_DESCRIPTION}"
-    QMAKE_TARGET_COPYRIGHT      = "$${QGC_APP_COPYRIGHT}"
-    QMAKE_TARGET_PRODUCT        = "$${QGC_APP_NAME}"
-}
+# Android build - using QGC_ORG_NAME and QGC_APP_NAME from branding section
+# Removed Windows-specific QMAKE_TARGET settings
 
 #-------------------------------------------------------------------------------------
-# iOS
-
-iOSBuild {
-    contains (CONFIG, DISABLE_BUILTIN_IOS) {
-        message("Skipping builtin support for iOS")
-    } else {
-        LIBS                 += -framework AVFoundation
-        #-- Info.plist (need an "official" one for the App Store)
-        ForAppStore {
-            message(App Store Build)
-            #-- Create official, versioned Info.plist
-            APP_STORE = $$system(cd $${SOURCE_DIR} && $${SOURCE_DIR}/tools/update_ios_version.sh $${SOURCE_DIR}/ios/iOSForAppStore-Info-Source.plist $${SOURCE_DIR}/ios/iOSForAppStore-Info.plist)
-            APP_ERROR = $$find(APP_STORE, "Error")
-            count(APP_ERROR, 1) {
-                error("Error building .plist file. 'ForAppStore' builds are only possible through the official build system.")
-            }
-            QT               += qml-private
-            QMAKE_INFO_PLIST  = $${SOURCE_DIR}/ios/iOSForAppStore-Info.plist
-            OTHER_FILES      += $${SOURCE_DIR}/ios/iOSForAppStore-Info.plist
-        } else {
-            QMAKE_INFO_PLIST  = $${SOURCE_DIR}/ios/iOS-Info.plist
-            OTHER_FILES      += $${SOURCE_DIR}/ios/iOS-Info.plist
-        }
-        QMAKE_ASSET_CATALOGS += ios/Images.xcassets
-        BUNDLE.files          = ios/QGCLaunchScreen.xib $$QMAKE_INFO_PLIST
-        QMAKE_BUNDLE_DATA    += BUNDLE
-    }
-}
+# Android-only build (iOS section removed)
 
 #
 # Plugin configuration
@@ -208,16 +157,15 @@ contains (DEFINES, QGC_DISABLE_UVC) {
 } else:exists(user_config.pri):infile(user_config.pri, DEFINES, QGC_DISABLE_UVC) {
     message("Skipping support for UVC devices (manual override from user_config.pri)")
     DEFINES += QGC_DISABLE_UVC
-} else:LinuxBuild {
+} else {
+    # Not Android - UVC handling for other platforms
     contains(QT_VERSION, 5.5.1) {
         message("Skipping support for UVC devices (conflict with Qt 5.5.1 on Ubuntu)")
         DEFINES += QGC_DISABLE_UVC
     }
 }
 
-LinuxBuild {
-    CONFIG += link_pkgconfig
-}
+# Removed LinuxBuild pkgconfig (Android-only)
 
 # Qt configuration
 
@@ -262,11 +210,11 @@ QT += \
         multimedia
 }
 
-AndroidBuild || iOSBuild {
-    # Android and iOS don't unclude these
+AndroidBuild {
+    # Android doesn't include serialport
 } else {
     QT += \
-        serialport \
+        serialport
 }
 
 contains(DEFINES, QGC_ENABLE_BLUETOOTH) {
@@ -291,9 +239,7 @@ ReleaseBuild {
 #
 
 DebugBuild {
-!iOSBuild {
     CONFIG += console
-}
 }
 
 #
@@ -355,8 +301,8 @@ CustomBuild {
     }
 } else {
     DEFINES += QGC_APPLICATION_NAME=\"\\\"QGroundControl\\\"\"
-    DEFINES += QGC_ORG_NAME=\"\\\"QGroundControl.org\\\"\"
-    DEFINES += QGC_ORG_DOMAIN=\"\\\"org.qgroundcontrol\\\"\"
+    DEFINES += QGC_ORG_NAME=\"\\\"jiacdi.com.jo\\\"\"
+    DEFINES += QGC_ORG_DOMAIN=\"\\\"com.jiacdi\\\"\"
     RESOURCES += \
         $$PWD/qgroundcontrol.qrc \
         $$PWD/qgcresources.qrc \
@@ -766,12 +712,7 @@ HEADERS += \
     src/comm/MockLinkMissionItemHandler.h \
 }
 
-WindowsBuild {
-    PRECOMPILED_HEADER += src/stable_headers.h
-    HEADERS += src/stable_headers.h
-    CONFIG -= silent
-    OTHER_FILES += .appveyor.yml
-}
+# Android-only build (removed WindowsBuild)
 
 contains(DEFINES, QGC_ENABLE_BLUETOOTH) {
     HEADERS += \
@@ -807,11 +748,6 @@ HEADERS += \
     src/GPS/vehicle_gps_position.h \
     src/Joystick/JoystickSDL.h \
     src/RunGuard.h \
-}
-
-iOSBuild {
-    OBJECTIVE_SOURCES += \
-        src/MobileScreenMgr.mm \
 }
 
 AndroidBuild {
@@ -1297,7 +1233,7 @@ contains (DEFINES, QGC_GST_TAISYNC_DISABLED) {
             src/Taisync/TaisyncHandler.cc \
             src/Taisync/TaisyncSettings.cc \
 
-        iOSBuild | AndroidBuild {
+        AndroidBuild {
             HEADERS += \
                 src/Taisync/TaisyncTelemetry.h \
                 src/Taisync/TaisyncVideoReceiver.h \
@@ -1528,20 +1464,5 @@ DISTFILES += \
     src/QmlControls/QGroundControl/Specific/qmldir
 
 #
-# Steps for "install" target on Linux
+# Removed Linux install targets (Android-only build)
 #
-LinuxBuild {
-    target.path = $${PREFIX}/bin/
-
-    share_qgroundcontrol.path = $${PREFIX}/share/qgroundcontrol/
-    share_qgroundcontrol.files = $${IN_PWD}/resources/
-
-    share_icons.path = $${PREFIX}/share/icons/hicolor/128x128/apps/
-    share_icons.files = $${IN_PWD}/resources/icons/qgroundcontrol.png
-    share_metainfo.path = $${PREFIX}/share/metainfo/
-    share_metainfo.files = $${IN_PWD}/deploy/org.mavlink.qgroundcontrol.metainfo.xml
-    share_applications.path = $${PREFIX}/share/applications/
-    share_applications.files = $${IN_PWD}/deploy/qgroundcontrol.desktop
-
-    INSTALLS += target share_qgroundcontrol share_icons share_metainfo share_applications
-}

@@ -15,7 +15,7 @@ exists($$PWD/custom/android) {
     android_source_dir_target.commands = $$QMAKE_MKDIR $$ANDROID_PACKAGE_SOURCE_DIR && \
             $$QMAKE_COPY_DIR $$PWD/android/* $$OUT_PWD/ANDROID_PACKAGE_SOURCE_DIR && \
             $$QMAKE_COPY_DIR $$PWD/custom/android/* $$OUT_PWD/ANDROID_PACKAGE_SOURCE_DIR && \
-            $$QMAKE_STREAM_EDITOR -i \"s/package=\\\"org.mavlink.qgroundcontrol\\\"/package=\\\"$$QGC_ANDROID_PACKAGE\\\"/\" $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml
+            $$QMAKE_STREAM_EDITOR -i \"s/package=\\\"com.jiacdi.digs\\\"/package=\\\"$$QGC_ANDROID_PACKAGE\\\"/\" $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml
     android_source_dir_target.depends = FORCE
 }
 
@@ -38,9 +38,9 @@ OTHER_FILES += \
     $$PWD/android/src/com/hoho/android/usbserial/driver/UsbSerialDriver.java \
     $$PWD/android/src/com/hoho/android/usbserial/driver/UsbSerialProber.java \
     $$PWD/android/src/com/hoho/android/usbserial/driver/UsbSerialRuntimeException.java \
-    $$PWD/android/src/org/mavlink/qgroundcontrol/QGCActivity.java \
-    $$PWD/android/src/org/mavlink/qgroundcontrol/UsbIoManager.java \
-    $$PWD/android/src/org/mavlink/qgroundcontrol/TaiSync.java \
+    $$PWD/android/src/com/jiacdi/digs/QGCActivity.java \
+    $$PWD/android/src/com/jiacdi/digs/UsbIoManager.java \
+    $$PWD/android/src/com/jiacdi/digs/TaiSync.java \
     $$PWD/android/src/org/freedesktop/gstreamer/androidmedia/GstAhcCallback.java \
     $$PWD/android/src/org/freedesktop/gstreamer/androidmedia/GstAhsCallback.java \
     $$PWD/android/src/org/freedesktop/gstreamer/androidmedia/GstAmcOnFrameAvailableListener.java
