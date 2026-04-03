@@ -1,8 +1,8 @@
 ################################################################################
 #
-# (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
+# (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.digs.org>
 #
-# QGroundControl is licensed according to the terms in the file
+# DIGS is licensed according to the terms in the file
 # COPYING.md in the root of the source code directory.
 #
 ################################################################################
@@ -181,12 +181,12 @@ exists ($$PWD/.git) {
         APP_VERSION_STR = "Daily $${GIT_BRANCH}:$${GIT_HASH} $${GIT_TIME}"
     }
 
-    message(QGroundControl APP_VERSION_STR VERSION $${APP_VERSION_STR} $${VERSION})
+    message(DIGS APP_VERSION_STR VERSION $${APP_VERSION_STR} $${VERSION})
 
     MacBuild {
         MAC_VERSION  = $$section(VERSION, ".", 0, 2)
         MAC_BUILD    = $$section(VERSION, ".", 3, 3)
-        message(QGroundControl MAC_VERSION MAC_BUILD $${MAC_VERSION} $${MAC_BUILD})
+        message(DIGS MAC_VERSION MAC_BUILD $${MAC_VERSION} $${MAC_BUILD})
     }
 }
 DEFINES += APP_VERSION_STR=\"\\\"$$APP_VERSION_STR\\\"\"
@@ -282,8 +282,8 @@ LOCATION_PLUGIN_NAME    = QGeoServiceProviderFactoryQGC
 DEFINES += _TTY_NOWARN_
 
 MacBuild {
-    QMAKE_TARGET_BUNDLE_PREFIX =    org.qgroundcontrol
-    QMAKE_BUNDLE =                  qgroundcontrol
+    QMAKE_TARGET_BUNDLE_PREFIX =    com.jiacdi
+    QMAKE_BUNDLE =                  digs
 }
 
 #

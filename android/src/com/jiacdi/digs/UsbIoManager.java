@@ -1,4 +1,4 @@
-package org.mavlink.qgroundcontrol;
+package com.jiacdi.digs;
 
 /* Copyright 2011 Google Inc.
 *

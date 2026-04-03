@@ -1,4 +1,4 @@
-package org.mavlink.qgroundcontrol;
+package com.jiacdi.digs;
 
 /* Copyright 2013 Google Inc.
  *
@@ -73,7 +73,7 @@ public class QGCActivity extends QtActivity
     private static HashMap<Integer, Long>               _userDataHashByDeviceId;
     private static final String                         TAG = "QGC_QGCActivity";
     private static PowerManager.WakeLock                _wakeLock;
-    private static final String                         ACTION_USB_PERMISSION = "org.mavlink.qgroundcontrol.action.USB_PERMISSION";
+    private static final String                         ACTION_USB_PERMISSION = "com.jiacdi.digs.action.USB_PERMISSION";
     private static PendingIntent                        _usbPermissionIntent = null;
     private TaiSync                                     taiSync = null;
     private Timer                                       probeAccessoriesTimer = null;

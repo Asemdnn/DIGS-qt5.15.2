@@ -1,11 +1,12 @@
-# Android CI Build Workflow
+# Android CI Build Workflow for DIGS
 
 name: Android Build
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
@@ -13,22 +14,40 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up JDK
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v4
       with:
-        java-version: '11'
+        java-version: '17'
+        distribution: 'temurin'
 
-    - name: Install Android NDK
-      run: |
-        wget https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
-        unzip android-ndk-r21e-linux-x86_64.zip -d $HOME/Android/ndk
+    - name: Install Android SDK
+      uses: android-actions/setup-android@v2
 
-    - name: Build using CMake
+    - name: Install Qt
+      uses: jurplel/setup-qt-action@v2
+      with:
+        version: '5.15.2'
+        host: 'linux'
+        target: 'android'
+        arch: 'arm64_v8a'
+
+    - name: Set up Android NDK
       run: |
-        cd path/to/your/project
-        mkdir build
+        echo "NDK_VERSION=21e" >> $GITHUB_ENV
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
+
+    - name: Build Android APK
+      run: |
+        export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21e
+        mkdir -p build
         cd build
-        cmake .. -DANDROID_ABI=arm64-v8a -DCMAKE_TOOLCHAIN_FILE=$HOME/Android/ndk/android-ndk-r21e/build/cmake/android.toolchain.cmake
-        cmake --build .
+        qmake -spec android-clang ..
+        make -j$(nproc)
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: DIGS-debug.apk
+        path: build/android-build/bin/*.apk

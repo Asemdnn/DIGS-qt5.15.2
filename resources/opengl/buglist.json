@@ -1,5 +1,5 @@
 {
-    "name": "QGroundControl OpenGL Driver Blacklist",
+    "name": "DIGS OpenGL Driver Blacklist",
     "version": "5.5",
     "entries": [
         {
