@@ -54,25 +54,35 @@ jobs:
           -skip qtwebkit -skip qtwebengine \
           -ANDROID_NDK_HOST=linux-x86_64 \
           -ANDROID_NDK_PLATFORM=android-21 \
-          -ANDROID_SDK_ROOT=$ANDROID_HOME \
-          2>&1 | tail -20
+          -ANDROID_SDK_ROOT=$ANDROID_HOME
         
-        make -j$(nproc) 2>&1 | tail -10
-        make install 2>&1 | tail -5
+        make -j$(nproc)
+        make install
 
     - name: Set up Android NDK
       run: |
         yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21.4.7075529"
+
+    - name: Verify Qt Installation
+      run: |
+        ls -la ~/Qt/5.15.2/android/bin/ || echo "Qt bin not found"
 
     - name: Build Android APK
       run: |
         export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21.4.7075529
-        export PATH=$HOME/Qt/5.15.2/android/bin:$PATH
+        export QT_DIR=~/Qt/5.15.2/android
+        export PATH=$QT_DIR/bin:$PATH
         export QT_QPA_PLATFORM=offscreen
+        
+        echo "Qt path: $QT_DIR"
+        echo "PATH: $PATH"
+        which qmake || echo "qmake not found in PATH"
+        
         mkdir -p build
         cd build
         qmake -spec android-clang ..
-        make -j$(nproc) 2>&1 | tail -20
+        make -j$(nproc)
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
