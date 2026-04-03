@@ -33,7 +33,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/Qt
-        key: qt-5.15.2-android-arm64
+        key: qt-5.15.2-android-arm64-v2
 
     - name: Install Qt for Android
       if: steps.cache-qt.outputs.cache-hit != 'true'
@@ -41,12 +41,20 @@ jobs:
         mkdir -p ~/Qt/5.15.2/android
         cd ~/Qt/5.15.2/android
         
-        # Download Qt for Android source (.tar.xz has correct line endings)
+        # Download Qt for Android source
         wget -q "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz" -O qt-src.tar.xz
         tar -xf qt-src.tar.xz
         
-        echo "Building Qt..."
+        echo "Patching Qt source for modern GCC compatibility..."
         cd qt-everywhere-src-5.15.2
+        
+        # Fix qfloat16.h - add missing <limits> header
+        sed -i '/#include <string.h>/a #include <limits>' qtbase/src/corelib/global/qfloat16.h
+        
+        # Fix qendian.h - add missing <limits> header  
+        sed -i '/#include <string.h>/a #include <limits>' qtbase/src/corelib/global/qendian.h
+        
+        echo "Building Qt..."
         
         bash ./configure -xplatform android-clang \
           -prefix ~/Qt/5.15.2/android \
