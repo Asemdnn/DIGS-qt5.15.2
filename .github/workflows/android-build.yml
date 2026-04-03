@@ -33,7 +33,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/Qt
-        key: qt-5.15.2-android-arm64-v6
+        key: qt-5.15.2-android-arm64-v7
 
     - name: Install Qt for Android
       if: steps.cache-qt.outputs.cache-hit != 'true'
@@ -59,10 +59,7 @@ jobs:
         echo "Building Qt..."
         bash ./configure -xplatform android-clang \
           -prefix ~/Qt/5.15.2/android \
-          -nomake examples -nomake tests \
-          -ANDROID_NDK_HOST=linux-x86_64 \
-          -ANDROID_NDK_PLATFORM=android-21 \
-          -ANDROID_SDK_ROOT=$ANDROID_HOME || { cat config.log; exit 1; }
+          -nomake examples -nomake tests
         
         make -j$(nproc) || exit 1
         make install || exit 1
