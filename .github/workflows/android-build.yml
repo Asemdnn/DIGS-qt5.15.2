@@ -11,10 +11,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 300
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
 
     - name: Set up JDK
       uses: actions/setup-java@v4
@@ -25,26 +28,53 @@ jobs:
     - name: Install Android SDK
       uses: android-actions/setup-android@v2
 
-    - name: Install Qt
-      uses: jurplel/setup-qt-action@v2
+    - name: Cache Qt
+      id: cache-qt
+      uses: actions/cache@v4
       with:
-        version: '5.15.2'
-        host: 'linux'
-        target: 'android'
-        arch: 'arm64_v8a'
+        path: ~/Qt
+        key: qt-5.15.2-android-arm64
+
+    - name: Install Qt for Android
+      if: steps.cache-qt.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p ~/Qt/5.15.2/android
+        cd ~/Qt/5.15.2/android
+        
+        # Download Qt for Android prebuilt (using arc.ustc.edu.cn mirror)
+        wget -q https://mirrors.ustc.edu.cn/qtproject/archive/qt/5.15/5.15.2-single/qt-everywhere-opensource-src-5.15.2.tar.xz -O qt-src.tar.xz || exit 1
+        
+        echo "Downloaded Qt source, extracting..."
+        tar -xf qt-src.tar.xz
+        
+        echo "Building Qt (this takes a while)..."
+        cd qt-everywhere-opensource-src-5.15.2
+        
+        ./configure -xplatform android-clang \
+          -prefix $HOME/Qt/5.15.2/android \
+          -nomake examples -nomake tests \
+          -skip qtwebkit -skip qtwebengine \
+          -ANDROID_NDK_HOST=linux-x86_64 \
+          -ANDROID_NDK_PLATFORM=android-21 \
+          -ANDROID_SDK_ROOT=$ANDROID_HOME \
+          2>&1 | tail -20
+        
+        make -j$(nproc) 2>&1 | tail -10
+        make install 2>&1 | tail -5
 
     - name: Set up Android NDK
       run: |
-        echo "NDK_VERSION=21e" >> $GITHUB_ENV
         yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
 
     - name: Build Android APK
       run: |
-        export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21e
+        export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21.4.7075529
+        export PATH=$HOME/Qt/5.15.2/android/bin:$PATH
+        export QT_QPA_PLATFORM=offscreen
         mkdir -p build
         cd build
         qmake -spec android-clang ..
-        make -j$(nproc)
+        make -j$(nproc) 2>&1 | tail -20
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
