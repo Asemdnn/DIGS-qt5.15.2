@@ -28,12 +28,17 @@ jobs:
     - name: Install Android SDK
       uses: android-actions/setup-android@v2
 
+    - name: Set up Android NDK
+      run: |
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21.4.7075529"
+
     - name: Cache Qt
       id: cache-qt
       uses: actions/cache@v4
       with:
         path: ~/Qt
-        key: qt-5.15.2-android-arm64-v7
+        key: qt-5.15.2-android-arm64-v8
 
     - name: Install Qt for Android
       if: steps.cache-qt.outputs.cache-hit != 'true'
@@ -57,24 +62,22 @@ jobs:
         done
         
         echo "Building Qt..."
-        bash ./configure -xplatform android-clang \
+        bash ./configure \
+          -xplatform android-clang \
           -prefix ~/Qt/5.15.2/android \
-          -nomake examples -nomake tests
+          -nomake examples -nomake tests \
+          -android-sdk $ANDROID_HOME \
+          -android-ndk $ANDROID_NDK_HOME \
+          -android-ndk-platform android-21
         
         make -j$(nproc) || exit 1
         make install || exit 1
-
-    - name: Set up Android NDK
-      run: |
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
-        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21.4.7075529"
 
     - name: Verify Qt Installation
       run: ls -la ~/Qt/5.15.2/android/bin/ 2>/dev/null || echo "Qt not found"
 
     - name: Build Android APK
       run: |
-        export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21.4.7075529
         export PATH=~/Qt/5.15.2/android/bin:$PATH
         export QT_QPA_PLATFORM=offscreen
         mkdir -p build && cd build
