@@ -7,6 +7,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -79,6 +80,8 @@ jobs:
 
     - name: Build APK
       run: |
+        git submodule init
+        git submodule update
         export PATH=~/Qt/5.15.2/android/bin:$PATH
         export QT_QPA_PLATFORM=offscreen
         mkdir -p build && cd build
