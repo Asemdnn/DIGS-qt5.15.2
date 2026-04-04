@@ -18,6 +18,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 1
+        submodules: recursive
 
     - name: Set up JDK
       uses: actions/setup-java@v4
@@ -38,7 +39,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/Qt
-        key: qt-5.15.2-android-arm64-v10
+        key: qt-5.15.2-android-arm64-v11
 
     - name: Install Qt for Android
       if: steps.cache-qt.outputs.cache-hit != 'true'
@@ -49,7 +50,6 @@ jobs:
         wget -q "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz" -O qt-src.tar.xz
         tar -xf qt-src.tar.xz
         
-        echo "Patching Qt source..."
         cd qt-everywhere-src-5.15.2
         
         # Add #include <limits>
@@ -61,20 +61,9 @@ jobs:
           fi
         done
         
-        # Set up environment for Android cross-compile
         export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21.4.7075529
-        export ANDROID_API=android-21
         
-        # Find the toolchain
-        export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64
-        export PATH=$TOOLCHAIN/bin:$PATH
-        
-        echo "Toolchain: $TOOLCHAIN"
-        ls $TOOLCHAIN/bin/aarch64-linux-android21-clang* 2>/dev/null || ls $TOOLCHAIN/bin/clang* 2>/dev/null | head -3
-        
-        echo "Building Qt for Android..."
-        
-        # Use the android-clang spec but override compilers
+        echo "Building Qt..."
         ./configure \
           -xplatform android-clang \
           -prefix ~/Qt/5.15.2/android \
@@ -83,14 +72,8 @@ jobs:
           -android-ndk $ANDROID_NDK_ROOT \
           -android-ndk-platform android-21
         
-        # Dump config summary
-        head -100 config.summary 2>/dev/null || echo "No config.summary"
-        
         make -j$(nproc) || exit 1
         make install || exit 1
-
-    - name: Verify Qt
-      run: ls ~/Qt/5.15.2/android/bin/ 2>/dev/null || echo "Qt not found"
 
     - name: Build APK
       run: |
