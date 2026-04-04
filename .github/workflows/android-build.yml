@@ -84,9 +84,19 @@ jobs:
         git submodule update
         export PATH=~/Qt/5.15.2/android/bin:$PATH
         export QT_QPA_PLATFORM=offscreen
+        export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21.4.7075529
+        
+        echo "=== Qt paths ==="
+        ls -la ~/Qt/5.15.2/android/bin/
+        
+        echo "=== Checking mavlink ==="
+        ls -la libs/mavlink/ 2>/dev/null || echo "mavlink not found"
+        
+        echo "=== Running qmake ==="
         mkdir -p build && cd build
-        qmake -spec android-clang ..
-        make -j$(nproc)
+        qmake -spec android-clang .. 2>&1 || exit 1
+        echo "=== Running make ==="
+        make -j$(nproc) 2>&1 || exit 1
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
