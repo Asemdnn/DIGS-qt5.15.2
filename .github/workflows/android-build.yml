@@ -14,15 +14,11 @@ jobs:
     timeout-minutes: 300
 
     steps:
-    - name: Checkout code
+    - name: Checkout code with submodules
       uses: actions/checkout@v4
       with:
         fetch-depth: 1
-
-    - name: Initialize submodules
-      run: |
-        git submodule init
-        git submodule update
+        submodules: recursive
 
     - name: Set up JDK
       uses: actions/setup-java@v4
