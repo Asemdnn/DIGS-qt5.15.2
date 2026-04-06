@@ -15,11 +15,10 @@ jobs:
     timeout-minutes: 300
 
     steps:
-    - name: Checkout code with submodules
+    - name: Checkout code
       uses: actions/checkout@v4
       with:
         fetch-depth: 1
-        submodules: recursive
 
     - name: Set up JDK
       uses: actions/setup-java@v4
@@ -80,14 +79,10 @@ jobs:
 
     - name: Build APK
       run: |
-        # Initialize submodules with verbose output
-        echo "=== Initializing submodules ==="
-        git submodule status
-        git submodule init
-        git submodule status
-        
-        echo "=== Fetching submodules ==="
-        git submodule update --recursive
+        # Clone mavlink directly (workaround for submodule issues)
+        echo "=== Cloning mavlink library ==="
+        mkdir -p libs/mavlink/include/mavlink/v2.0
+        git clone --depth 1 https://github.com/mavlink/c_library_v2.git libs/mavlink
         
         echo "=== Verifying mavlink ==="
         ls -la libs/mavlink/ 2>/dev/null || echo "mavlink directory not found"
