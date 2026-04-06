@@ -80,8 +80,19 @@ jobs:
 
     - name: Build APK
       run: |
+        # Initialize submodules with verbose output
+        echo "=== Initializing submodules ==="
+        git submodule status
         git submodule init
-        git submodule update
+        git submodule status
+        
+        echo "=== Fetching submodules ==="
+        git submodule update --recursive
+        
+        echo "=== Verifying mavlink ==="
+        ls -la libs/mavlink/ 2>/dev/null || echo "mavlink directory not found"
+        ls -la libs/mavlink/include/mavlink/v2.0/ 2>/dev/null || echo "mavlink v2.0 not found"
+        
         export PATH=~/Qt/5.15.2/android/bin:$PATH
         export QT_QPA_PLATFORM=offscreen
         export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21.4.7075529
