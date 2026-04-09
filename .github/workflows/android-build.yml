@@ -81,8 +81,12 @@ jobs:
       run: |
         # Clone mavlink directly (workaround for submodule issues)
         echo "=== Cloning mavlink library ==="
+        git clone --depth 1 https://github.com/mavlink/c_library_v2.git libs/mavlink-temp
+        
+        # Move files to expected location
         mkdir -p libs/mavlink/include/mavlink/v2.0
-        git clone --depth 1 https://github.com/mavlink/c_library_v2.git libs/mavlink
+        mv libs/mavlink-temp/* libs/mavlink/include/mavlink/v2.0/
+        rm -rf libs/mavlink-temp
         
         echo "=== Verifying mavlink ==="
         ls -la libs/mavlink/ 2>/dev/null || echo "mavlink directory not found"
