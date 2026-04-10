@@ -79,18 +79,16 @@ jobs:
 
     - name: Build APK
       run: |
-        # Clone mavlink directly (workaround for submodule issues)
+        # Clone mavlink library with both common and ardupilotmega dialects (project uses ardupilotmega which has VTOL types)
         echo "=== Cloning mavlink library ==="
-        git clone --depth 1 https://github.com/mavlink/c_library_v2.git libs/mavlink-temp
-        
-        # Move files to expected location
         mkdir -p libs/mavlink/include/mavlink/v2.0
-        mv libs/mavlink-temp/* libs/mavlink/include/mavlink/v2.0/
+        git clone --depth 1 --branch master https://github.com/mavlink/c_library_v2.git libs/mavlink-temp
+        cp -r libs/mavlink-temp/common/* libs/mavlink/include/mavlink/v2.0/
+        cp -r libs/mavlink-temp/ardupilotmega/* libs/mavlink/include/mavlink/v2.0/
         rm -rf libs/mavlink-temp
         
         echo "=== Verifying mavlink ==="
-        ls -la libs/mavlink/ 2>/dev/null || echo "mavlink directory not found"
-        ls -la libs/mavlink/include/mavlink/v2.0/ 2>/dev/null || echo "mavlink v2.0 not found"
+        ls -la libs/mavlink/include/mavlink/v2.0/ | head -10
         
         export PATH=~/Qt/5.15.2/android/bin:$PATH
         export QT_QPA_PLATFORM=offscreen
@@ -104,9 +102,10 @@ jobs:
         
         echo "=== Running qmake ==="
         mkdir -p build && cd build
-        # Explicitly set architecture to avoid x86_64 error (arm64-v8a is the correct value)
-        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a .. 2>&1 || exit 1
+        # Build only for ARM64 to avoid multi-arch issues and set correct mavlink path
+        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a DEFINES+=MAVLINK_INCLUDE_DIR=libs/mavlink/include .. 2>&1 || exit 1
         echo "=== Running make ==="
+        # Only build arm64 v8a target
         make -j$(nproc) 2>&1 || exit 1
 
     - name: Upload APK
