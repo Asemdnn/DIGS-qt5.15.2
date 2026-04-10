@@ -104,11 +104,10 @@ jobs:
         
         echo "=== Running qmake ==="
         mkdir -p build && cd build
-        # Explicitly configure for ARM64 architecture to avoid x86_64 issue
-        export ANDROID_TARGET_ARCH=arm64
-        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64 .. 2>&1 || exit 1
+        # Explicitly set architecture to avoid x86_64 error
+        qmake -spec android-clang QT_ARCH=arm64 .. 2>&1 || exit 1
         echo "=== Running make ==="
-        make -j$(nproc) ANDROID_TARGET_ARCH=arm64 2>&1 || exit 1
+        make -j$(nproc) 2>&1 || exit 1
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
