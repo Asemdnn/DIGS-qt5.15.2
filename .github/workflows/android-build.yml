@@ -79,9 +79,6 @@ jobs:
 
     - name: Build APK
       run: |
-        # Get absolute path for current directory
-        WORKSPACE=$(pwd)
-        
         # Clone mavlink library with both common and ardupilotmega dialects (project uses ardupilotmega which has VTOL types)
         echo "=== Cloning mavlink library ==="
         mkdir -p libs/mavlink/include/mavlink/v2.0
@@ -102,8 +99,9 @@ jobs:
         
         echo "=== Running qmake ==="
         mkdir -p build
-        # Use absolute MAVLINKPATH to avoid relative path issues
-        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a MAVLINKPATH=$WORKSPACE/libs/mavlink/include .. 2>&1 || exit 1
+        # Use absolute path to qgroundcontrol.pro
+        PROJDIR=$(pwd)
+        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a MAVLINKPATH=$PROJDIR/libs/mavlink/include $PROJDIR/qgroundcontrol.pro 2>&1 || exit 1
         echo "=== Running make ==="
         make -C build -j$(nproc) 2>&1 || exit 1
 
