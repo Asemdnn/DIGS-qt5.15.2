@@ -104,8 +104,8 @@ jobs:
         
         echo "=== Running qmake ==="
         mkdir -p build && cd build
-        # Explicitly set architecture to avoid x86_64 error
-        qmake -spec android-clang QT_ARCH=arm64 .. 2>&1 || exit 1
+        # Explicitly set architecture to avoid x86_64 error (arm64-v8a is the correct value)
+        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a .. 2>&1 || exit 1
         echo "=== Running make ==="
         make -j$(nproc) 2>&1 || exit 1
 
