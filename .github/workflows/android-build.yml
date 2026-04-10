@@ -79,6 +79,9 @@ jobs:
 
     - name: Build APK
       run: |
+        # Get absolute path for current directory
+        WORKSPACE=$(pwd)
+        
         # Clone mavlink library with both common and ardupilotmega dialects (project uses ardupilotmega which has VTOL types)
         echo "=== Cloning mavlink library ==="
         mkdir -p libs/mavlink/include/mavlink/v2.0
@@ -97,16 +100,12 @@ jobs:
         echo "=== Qt paths ==="
         ls -la ~/Qt/5.15.2/android/bin/
         
-        echo "=== Checking mavlink ==="
-        ls -la libs/mavlink/ 2>/dev/null || echo "mavlink not found"
-        
         echo "=== Running qmake ==="
-        mkdir -p build && cd build
-        # Build only for ARM64 to avoid multi-arch issues and set correct mavlink path
-        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a DEFINES+=MAVLINK_INCLUDE_DIR=libs/mavlink/include .. 2>&1 || exit 1
+        mkdir -p build
+        # Use absolute MAVLINKPATH to avoid relative path issues
+        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a MAVLINKPATH=$WORKSPACE/libs/mavlink/include .. 2>&1 || exit 1
         echo "=== Running make ==="
-        # Only build arm64 v8a target
-        make -j$(nproc) 2>&1 || exit 1
+        make -C build -j$(nproc) 2>&1 || exit 1
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
