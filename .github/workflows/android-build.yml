@@ -83,12 +83,15 @@ jobs:
         echo "=== Cloning mavlink library ==="
         mkdir -p libs/mavlink/include/mavlink/v2.0
         git clone --depth 1 --branch master https://github.com/mavlink/c_library_v2.git libs/mavlink-temp
-        cp -r libs/mavlink-temp/common/* libs/mavlink/include/mavlink/v2.0/
-        cp -r libs/mavlink-temp/ardupilotmega/* libs/mavlink/include/mavlink/v2.0/
+        # Create proper subdirectories and copy files into them
+        mkdir -p libs/mavlink/include/mavlink/v2.0/common
+        mkdir -p libs/mavlink/include/mavlink/v2.0/ardupilotmega
+        cp -r libs/mavlink-temp/common/* libs/mavlink/include/mavlink/v2.0/common/
+        cp -r libs/mavlink-temp/ardupilotmega/* libs/mavlink/include/mavlink/v2.0/ardupilotmega/
         rm -rf libs/mavlink-temp
         
         echo "=== Verifying mavlink ==="
-        ls -la libs/mavlink/include/mavlink/v2.0/ | head -10
+        ls -la libs/mavlink/include/mavlink/v2.0/
         
         export PATH=~/Qt/5.15.2/android/bin:$PATH
         export QT_QPA_PLATFORM=offscreen
@@ -98,11 +101,11 @@ jobs:
         ls -la ~/Qt/5.15.2/android/bin/
         
         echo "=== Running qmake ==="
-        # Use absolute paths - set both MAVLINKPATH (absolute) and MAVLINKPATH_REL
+        # Set absolute paths - MAVLINKPATH should point to folder containing common/ and ardupilotmega/ subdirectories
         PROJDIR=$(pwd)
         mkdir -p build
         cd build
-        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a SOURCE_DIR=$PROJDIR MAVLINKPATH=$PROJDIR/libs/mavlink/include/mavlink MAVLINKPATH_REL=$PROJDIR/libs/mavlink/include/mavlink/v2.0 $PROJDIR/qgroundcontrol.pro 2>&1 || exit 1
+        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a SOURCE_DIR=$PROJDIR MAVLINKPATH=$PROJDIR/libs/mavlink/include/mavlink $PROJDIR/qgroundcontrol.pro 2>&1 || exit 1
         echo "=== Running make ==="
         make -j$(nproc) 2>&1 || exit 1
 
