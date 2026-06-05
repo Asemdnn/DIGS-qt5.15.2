@@ -11,7 +11,9 @@
 
 #include "EventHandler.h"
 #include "QGCLoggingCategory.h"
+#include <mavlink.h>
 #include <libevents/libevents_definitions.h>
+#include <libevents/libs/cpp/common/event_type.h>
 
 Q_DECLARE_METATYPE(QSharedPointer<events::parser::ParsedEvent>);
 
@@ -67,7 +69,8 @@ void EventHandler::gotEvent(const mavlink_event_t& event)
         return;
     }
 
-    std::unique_ptr<events::parser::ParsedEvent> parsed_event = _parser.parse(event);
+    events::EventType eventWrapper(event);
+    std::unique_ptr<events::parser::ParsedEvent> parsed_event = _parser.parse(eventWrapper);
     if (parsed_event == nullptr) {
         qCWarning(EventsLog) << "Got Event w/o known metadata: ID:" << event.id << "comp id:" << _compid;
         return;
