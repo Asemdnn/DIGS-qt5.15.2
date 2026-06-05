@@ -2,17 +2,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QLoggingCategory>
-
-// QtQmlIntegration macros (Qt 6 only, define empty for Qt 5)
-#ifndef QML_ELEMENT
-#define QML_ELEMENT
-#endif
-#ifndef QML_UNCREATABLE
-#define QML_UNCREATABLE(x)
-#endif
-#ifndef Q_MOC_INCLUDE
-#define Q_MOC_INCLUDE(x)
-#endif
+#include <QtQml/qqml.h>
 
 class LinkInterface;
 class Vehicle;
