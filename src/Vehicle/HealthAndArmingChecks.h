@@ -16,7 +16,7 @@
 #include <mavlink.h>
 #include <libevents/libs/cpp/parse/parser.h>
 #include <libevents/libs/cpp/generated/events_generated.h>
-#include <libevents/libs/cpp/generated/events_stubs.h>
+#include <libevents_stubs.h>
 
 Q_DECLARE_LOGGING_CATEGORY(HealthAndArmingChecks)
 
