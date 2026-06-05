@@ -39,7 +39,7 @@ jobs:
       with:
         version: '5.15.2'
         target: 'android'
-        arch: 'android_arm64_v8a'
+        arch: 'android'
 
     - name: Build APK
       run: |
@@ -58,7 +58,7 @@ jobs:
         ls -la libs/mavlink/include/mavlink/v2.0/
         
         # Set up Qt environment from install-qt action
-        export PATH="$QT_DIR/bin:$PATH"
+        export PATH="$QT_ROOT_DIR/bin:$PATH"
         export QT_QPA_PLATFORM=offscreen
         
         # Try both possible NDK versions
@@ -73,7 +73,7 @@ jobs:
         fi
         
         echo "=== Qt paths ==="
-        ls -la "$QT_DIR/bin/"
+        ls -la "$QT_ROOT_DIR/bin/"
         
         echo "=== Running qmake ==="
         # Set absolute paths - MAVLINKPATH should point to folder containing common/ and ardupilotmega/ subdirectories
