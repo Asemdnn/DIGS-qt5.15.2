@@ -12,7 +12,6 @@
 #include "EventHandler.h"
 #include "QGCLoggingCategory.h"
 #include <libevents/libevents_definitions.h>
-#include <libevents/libs/cpp/common/event_type.h>
 
 Q_DECLARE_METATYPE(QSharedPointer<events::parser::ParsedEvent>);
 
@@ -68,8 +67,7 @@ void EventHandler::gotEvent(const mavlink_event_t& event)
         return;
     }
 
-    events::common::EventType eventType(event);
-    std::unique_ptr<events::parser::ParsedEvent> parsed_event = _parser.parse(eventType);
+    std::unique_ptr<events::parser::ParsedEvent> parsed_event = _parser.parse(event);
     if (parsed_event == nullptr) {
         qCWarning(EventsLog) << "Got Event w/o known metadata: ID:" << event.id << "comp id:" << _compid;
         return;
@@ -88,10 +86,6 @@ void EventHandler::handleEvents(const mavlink_message_t& message)
 
 void EventHandler::setMetadata(const QString &metadataJsonFileName, const QString &translationJsonFileName)
 {
-    auto translate = [](const std::string& s) {
-        // TODO: use translation file
-        return s;
-    };
     if (_parser.loadDefinitionsFile(metadataJsonFileName.toStdString())) {
         if (_parser.hasDefinitions()) {
             // do we have queued events?
