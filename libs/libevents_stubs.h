@@ -35,7 +35,7 @@ enum class navigation_mode_category_t : uint8_t {
     undefined = 0,
     manual = 1,
     assisted = 2,
-    auto = 3,
+    autonomous = 3,
     test = 4,
 
     _max = 5
