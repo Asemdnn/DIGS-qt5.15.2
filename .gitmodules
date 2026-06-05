@@ -1,3 +1,6 @@
 [submodule "libs/mavlink"]
 	path = libs/mavlink
 	url = https://github.com/mavlink/c_library_v2.git
+[submodule "libs/libevents/libevents"]
+	path = libs/libevents/libevents
+	url = https://github.com/mavlink/libevents.git

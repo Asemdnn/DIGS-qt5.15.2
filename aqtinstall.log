@@ -1,0 +1,2 @@
+2026-06-05 18:19:26,088 - aqt.helper - DEBUG - helper 125703289750400 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/android/qt5_5152/Updates.xml.sha256
+2026-06-05 18:19:57,494 - aqt.helper - DEBUG - helper 137163226919808 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/android/qt5_5152/Updates.xml.sha256
