@@ -35,7 +35,7 @@ class MultiVehicleManager : public QGCTool
     Q_PROPERTY(Vehicle              *offlineEditingVehicle          READ offlineEditingVehicle                                              CONSTANT)
 
 public:
-    explicit MultiVehicleManager(QObject *parent = nullptr);
+    explicit MultiVehicleManager(QGCApplication* app, QGCToolbox* toolbox);
     ~MultiVehicleManager();
 
     static MultiVehicleManager *instance();
