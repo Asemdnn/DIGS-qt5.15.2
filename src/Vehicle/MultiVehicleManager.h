@@ -4,6 +4,11 @@
 #include <QtCore/QLoggingCategory>
 #include <QtQml/qqml.h>
 
+// Q_MOC_INCLUDE is Qt 6 only, define empty for Qt 5
+#ifndef Q_MOC_INCLUDE
+#define Q_MOC_INCLUDE(x)
+#endif
+
 class LinkInterface;
 class Vehicle;
 class QmlObjectListModel;
