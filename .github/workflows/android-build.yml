@@ -35,12 +35,11 @@ jobs:
         $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21.4.7075529" || $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21e"
 
     - name: Install Qt
-      uses: install-qt/install-qt@v1
+      uses: jurplel/install-qt-action@v3
       with:
         version: '5.15.2'
         target: 'android'
         arch: 'android_arm64_v8a'
-        setup-python: 'false'
 
     - name: Build APK
       run: |
