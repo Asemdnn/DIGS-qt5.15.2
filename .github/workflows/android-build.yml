@@ -50,14 +50,8 @@ jobs:
         git clone --depth 1 --branch master https://github.com/mavlink/c_library_v2.git libs/mavlink-temp
         # Copy root-level mavlink files (mavlink.h, mavlink_types.h, protocol.h)
         cp -r libs/mavlink-temp/*.h libs/mavlink/include/mavlink/v2.0/
-        # Create proper subdirectories and copy files into them
-        # ardupilotmega depends on common and standard
-        mkdir -p libs/mavlink/include/mavlink/v2.0/common
-        mkdir -p libs/mavlink/include/mavlink/v2.0/standard
-        mkdir -p libs/mavlink/include/mavlink/v2.0/ardupilotmega
-        cp -r libs/mavlink-temp/common/* libs/mavlink/include/mavlink/v2.0/common/
-        cp -r libs/mavlink-temp/standard/* libs/mavlink/include/mavlink/v2.0/standard/
-        cp -r libs/mavlink-temp/ardupilotmega/* libs/mavlink/include/mavlink/v2.0/ardupilotmega/
+        # Copy all dialect directories (ardupilotmega depends on common, standard, minimal, etc.)
+        cp -r libs/mavlink-temp/*/ libs/mavlink/include/mavlink/v2.0/
         rm -rf libs/mavlink-temp
         
         echo "=== Verifying mavlink ==="
