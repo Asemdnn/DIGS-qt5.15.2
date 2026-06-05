@@ -48,6 +48,8 @@ jobs:
         echo "=== Cloning mavlink library ==="
         mkdir -p libs/mavlink/include/mavlink/v2.0
         git clone --depth 1 --branch master https://github.com/mavlink/c_library_v2.git libs/mavlink-temp
+        # Copy root-level mavlink files (mavlink.h, mavlink_types.h, protocol.h)
+        cp -r libs/mavlink-temp/*.h libs/mavlink/include/mavlink/v2.0/
         # Create proper subdirectories and copy files into them
         mkdir -p libs/mavlink/include/mavlink/v2.0/common
         mkdir -p libs/mavlink/include/mavlink/v2.0/ardupilotmega
@@ -57,6 +59,8 @@ jobs:
         
         echo "=== Verifying mavlink ==="
         ls -la libs/mavlink/include/mavlink/v2.0/
+        ls -la libs/mavlink/include/mavlink/v2.0/common/
+        ls -la libs/mavlink/include/mavlink/v2.0/ardupilotmega/
         
         # Set up Qt environment from install-qt action
         export PATH="$QT_ROOT_DIR/bin:$PATH"
