@@ -8,30 +8,16 @@
  ****************************************************************************/
 
 /*
- * This header defines the events::EventType type.
- *
+ * This header declares the EventsLog logging category for libevents.
+ * The actual definition is in libs/libevents/definitions.cpp
  */
 
 #pragma once
 
-#include <cstdlib>
-#include <cstdarg>
-
 #include <QLoggingCategory>
 
+// Forward declaration - actual definition is in definitions.cpp via QGC_LOGGING_CATEGORY
 Q_DECLARE_LOGGING_CATEGORY(EventsLog)
-
-void qgc_events_parser_debug_printf(const char *fmt, ...);
-
-//#define LIBEVENTS_PARSER_DEBUG_PRINTF qgc_events_parser_debug_printf
-#define LIBEVENTS_DEBUG_PRINTF qgc_events_parser_debug_printf
-
-#include "MAVLinkProtocol.h"
-
-namespace events
-{
-using EventType = mavlink_event_t;
-} // namespace events
 
 
 
