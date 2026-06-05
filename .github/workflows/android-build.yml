@@ -34,58 +34,13 @@ jobs:
         yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
         $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21.4.7075529" || $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21e"
 
-    - name: Cache Qt
-      id: cache-qt
-      uses: actions/cache@v4
+    - name: Install Qt
+      uses: install-qt/install-qt@v1
       with:
-        path: ~/Qt
-        key: qt-5.15.2-android-arm64-v14
-        restore-keys: |
-          qt-5.15.2-android-arm64-
-
-    - name: Install Qt for Android
-      if: steps.cache-qt.outputs.cache-hit != 'true'
-      run: |
-        mkdir -p ~/Qt/5.15.2/android
-        cd ~/Qt/5.15.2/android
-        
-        # Download Qt 5.15.2 for Android (pre-built binary)
-        wget -q "https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-opensource-src-5.15.2.tar.xz" -O qt-src.tar.xz
-        tar -xf qt-src.tar.xz
-        
-        cd qt-everywhere-opensource-src-5.15.2
-        
-        # Add #include <limits> to fix C++20 compatibility issues
-        for f in qtbase/src/corelib/global/qfloat16.h \
-                 qtbase/src/corelib/global/qendian.h \
-                 qtbase/src/corelib/text/qbytearraymatcher.h; do
-          if [ -f "$f" ] && ! grep -q '<limits>' "$f"; then
-            sed -i '0,/#include/s/#include.*/&\n#include <limits>/' "$f"
-          fi
-        done
-        
-        # Try both possible NDK versions
-        if [ -d "$ANDROID_HOME/ndk/21.4.7075529" ]; then
-          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21.4.7075529
-        elif [ -d "$ANDROID_HOME/ndk/21e" ]; then
-          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21e
-        else
-          echo "ERROR: Android NDK not found"
-          ls -la $ANDROID_HOME/ndk/
-          exit 1
-        fi
-        
-        echo "Building Qt with NDK at $ANDROID_NDK_ROOT..."
-        ./configure \
-          -xplatform android-clang \
-          -prefix ~/Qt/5.15.2/android \
-          -nomake examples -nomake tests \
-          -android-sdk $ANDROID_HOME \
-          -android-ndk $ANDROID_NDK_ROOT \
-          -android-ndk-platform android-21
-        
-        make -j$(nproc) || exit 1
-        make install || exit 1
+        version: '5.15.2'
+        target: 'android'
+        arch: 'android_arm64_v8a'
+        setup-python: 'false'
 
     - name: Build APK
       run: |
@@ -103,8 +58,10 @@ jobs:
         echo "=== Verifying mavlink ==="
         ls -la libs/mavlink/include/mavlink/v2.0/
         
-        export PATH=~/Qt/5.15.2/android/bin:$PATH
+        # Set up Qt environment from install-qt action
+        export PATH="$QT_DIR/bin:$PATH"
         export QT_QPA_PLATFORM=offscreen
+        
         # Try both possible NDK versions
         if [ -d "$ANDROID_HOME/ndk/21.4.7075529" ]; then
           export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21.4.7075529
@@ -117,7 +74,7 @@ jobs:
         fi
         
         echo "=== Qt paths ==="
-        ls -la ~/Qt/5.15.2/android/bin/
+        ls -la "$QT_DIR/bin/"
         
         echo "=== Running qmake ==="
         # Set absolute paths - MAVLINKPATH should point to folder containing common/ and ardupilotmega/ subdirectories
