@@ -44,15 +44,9 @@ jobs:
 
     - name: Build APK
       run: |
-        # Clone mavlink library with both common and ardupilotmega dialects (project uses ardupilotmega which has VTOL types)
-        echo "=== Cloning mavlink library ==="
-        mkdir -p libs/mavlink/include/mavlink/v2.0
-        git clone --depth 1 --branch master https://github.com/mavlink/c_library_v2.git libs/mavlink-temp
-        # Copy root-level mavlink files (mavlink.h, mavlink_types.h, protocol.h)
-        cp -r libs/mavlink-temp/*.h libs/mavlink/include/mavlink/v2.0/
-        # Copy all dialect directories (ardupilotmega depends on common, standard, minimal, etc.)
-        cp -r libs/mavlink-temp/*/ libs/mavlink/include/mavlink/v2.0/
-        rm -rf libs/mavlink-temp
+        # Use git submodule for mavlink library (already defined in .gitmodules)
+        echo "=== Initializing mavlink submodule ==="
+        git submodule update --init --recursive
         
         echo "=== Verifying mavlink ==="
         ls -la libs/mavlink/include/mavlink/v2.0/
