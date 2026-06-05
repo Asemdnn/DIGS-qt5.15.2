@@ -46,31 +46,28 @@ enum class navigation_mode_category_t : uint8_t {
 
 } // namespace enums
 
-// Stub event IDs - normally generated from events JSON file
-enum class event_id_t : uint32_t {
-    test1 = 0x1001,
-    test2 = 0x1002,
-    test3 = 0x1003,
-    test4 = 0x1004,
-    test5 = 0x1005,
-    arming_check_summary = 0x1101,
-    health_summary = 0x1102,
-};
-
 // Stub decode functions for arming_check_summary event
-inline void decode_arming_check_summary(const EventType& event, uint8_t& error, uint8_t& warning, uint8_t& canArm) {
+// Note: These are normally generated from event definitions
+// Using upstream's health_component_t and navigation_mode_category_t for type compatibility
+inline void decode_arming_check_summary(const EventType& event, 
+    events::common::enums::health_component_t& error, 
+    events::common::enums::health_component_t& warning, 
+    events::common::enums::navigation_mode_category_t& canArm) {
     // Decode from event arguments - simplified stub
-    error = event.arguments[0];
-    warning = event.arguments[1];
-    canArm = event.arguments[2];
+    error = (events::common::enums::health_component_t)event.arguments[0];
+    warning = (events::common::enums::health_component_t)event.arguments[1];
+    canArm = (events::common::enums::navigation_mode_category_t)event.arguments[2];
 }
 
 // Stub decode functions for health_summary event
-inline void decode_health_summary(const EventType& event, uint8_t& isPresent, uint8_t& error, uint8_t& warning) {
+inline void decode_health_summary(const EventType& event, 
+    events::common::enums::health_component_t& isPresent, 
+    events::common::enums::health_component_t& error, 
+    events::common::enums::health_component_t& warning) {
     // Decode from event arguments - simplified stub
-    isPresent = event.arguments[0];
-    error = event.arguments[1];
-    warning = event.arguments[2];
+    isPresent = (events::common::enums::health_component_t)event.arguments[0];
+    error = (events::common::enums::health_component_t)event.arguments[1];
+    warning = (events::common::enums::health_component_t)event.arguments[2];
 }
 
 } // namespace common

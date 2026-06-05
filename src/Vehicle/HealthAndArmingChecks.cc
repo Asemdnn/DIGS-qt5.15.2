@@ -51,7 +51,7 @@ void HealthAndArmingCheckHandler::handleEvent(const events::parser::ParsedEvent&
     switch (type) {
         case Type::ArmingCheckSummary:
             reset();
-            if (event.id() == (uint32_t)events::common::event_id_t::arming_check_summary) {
+            if (event.id() == 1201) {  // arming_check_summary event ID
                 ArmingCheckSummary &arming = _results[_currentResult].arming;
                 events::common::decode_arming_check_summary(event.eventData(), arming.error, arming.warning, arming.canArm);
                 _expectedEvent = Type::Other;
@@ -69,7 +69,7 @@ void HealthAndArmingCheckHandler::handleEvent(const events::parser::ParsedEvent&
         }
             break;
         case Type::HealthSummary:
-            if (event.id() == (uint32_t)events::common::event_id_t::health_summary) {
+            if (event.id() == 1202) {  // health_summary event ID
                 HealthSummary &health = _results[_currentResult].health;
                 events::common::decode_health_summary(event.eventData(), health.isPresent, health.error, health.warning);
                 _currentResult = (_currentResult + 1) % 2;
