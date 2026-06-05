@@ -26,8 +26,8 @@ QGC_LOGGING_CATEGORY(MultiVehicleManagerLog, "Vehicle.MultiVehicleManager")
 
 Q_APPLICATION_STATIC(MultiVehicleManager, _multiVehicleManagerInstance);
 
-MultiVehicleManager::MultiVehicleManager(QObject *parent)
-    : QObject(parent)
+MultiVehicleManager::MultiVehicleManager(QGCApplication* app, QGCToolbox* toolbox)
+    : QGCTool(app, toolbox)
     , _gcsHeartbeatTimer(new QTimer(this))
     , _vehicles(new QmlObjectListModel(this))
     , _selectedVehicles(new QmlObjectListModel(this))
@@ -40,6 +40,11 @@ MultiVehicleManager::MultiVehicleManager(QObject *parent)
 MultiVehicleManager::~MultiVehicleManager()
 {
     qCDebug(MultiVehicleManagerLog) << this;
+}
+
+void MultiVehicleManager::setToolbox(QGCToolbox* toolbox)
+{
+    QGCTool::setToolbox(toolbox);
 }
 
 MultiVehicleManager *MultiVehicleManager::instance()

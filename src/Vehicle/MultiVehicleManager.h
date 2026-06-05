@@ -3,6 +3,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QLoggingCategory>
 #include <QtQml/qqml.h>
+#include "QGCToolbox.h"
 
 // Q_MOC_INCLUDE is Qt 6 only, define empty for Qt 5
 #ifndef Q_MOC_INCLUDE
@@ -13,10 +14,12 @@ class LinkInterface;
 class Vehicle;
 class QmlObjectListModel;
 class QTimer;
+class QGCToolbox;
+class QGCApplication;
 
 Q_DECLARE_LOGGING_CATEGORY(MultiVehicleManagerLog)
 
-class MultiVehicleManager : public QObject
+class MultiVehicleManager : public QGCTool
 {
     Q_OBJECT
     QML_ELEMENT
@@ -39,6 +42,7 @@ public:
     static void registerQmlTypes();
 
     void init();
+    void setToolbox(QGCToolbox* toolbox) override;
     Q_INVOKABLE Vehicle *getVehicleById(int vehicleId) const;
     Q_INVOKABLE void      selectVehicle(int vehicleId);
     Q_INVOKABLE void    deselectVehicle(int vehicleId);

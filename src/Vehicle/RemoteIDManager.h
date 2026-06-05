@@ -5,7 +5,18 @@
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QTimer>
 #include <QtPositioning/QGeoPositionInfo>
-#include <QtQml/qqml.h>
+
+// QtQmlIntegration macros - define as empty for Qt 5.15.2 compatibility
+// (these are Qt 6 only macros, but we need to prevent redefinition warnings)
+#ifdef QML_ELEMENT
+#undef QML_ELEMENT
+#endif
+#define QML_ELEMENT
+
+#ifdef QML_UNCREATABLE
+#undef QML_UNCREATABLE
+#endif
+#define QML_UNCREATABLE(x)
 
 #include "MAVLinkLib.h"
 
