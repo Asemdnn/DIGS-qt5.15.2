@@ -59,7 +59,7 @@ jobs:
                  qtbase/src/corelib/global/qendian.h \
                  qtbase/src/corelib/text/qbytearraymatcher.h; do
           if [ -f "$f" ] && ! grep -q '<limits>' "$f"; then
-            sed -i '/^#include/s/^#include.*/&\n#include <limits>/' "$f"
+            sed -i '0,/#include/s/#include.*/&\n#include <limits>/' "$f"
           fi
         done
         
