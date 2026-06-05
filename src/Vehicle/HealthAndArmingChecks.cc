@@ -10,6 +10,8 @@
 #include "HealthAndArmingChecks.h"
 
 #include <QGCLoggingCategory.h>
+#include <libevents/libs/cpp/common/event_type.h>
+#include "../../libs/libevents_stubs.h"
 
 QGC_LOGGING_CATEGORY(HealthAndArmingChecks, "HealthAndArmingChecks");
 
