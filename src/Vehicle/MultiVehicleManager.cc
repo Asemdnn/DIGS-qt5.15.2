@@ -22,12 +22,13 @@
 
 // QApplicationStatic not available in Qt 5.15 Android, define manually or use alternative
 // #include <QtCore/QApplicationStatic>
+#include <QtGlobal>
 #include <QtCore/QTimer>
 
 QGC_LOGGING_CATEGORY(MultiVehicleManagerLog, "Vehicle.MultiVehicleManager")
 
-// Q_APPLICATION_STATIC requires QtCore/QApplicationStatic which is not available in Qt 5.15 Android
-// Q_APPLICATION_STATIC(MultiVehicleManager, _multiVehicleManagerInstance);
+// Use Q_GLOBAL_STATIC instead of Q_APPLICATION_STATIC (not available in Qt 5.15 Android)
+Q_GLOBAL_STATIC(MultiVehicleManager, _multiVehicleManagerInstance)
 
 MultiVehicleManager::MultiVehicleManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
