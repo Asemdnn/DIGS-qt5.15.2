@@ -5,6 +5,9 @@ name: Android Build Fresh
 on:
   push:
     branches: [main]
+  repository_dispatch:
+    types: [build]
+  workflow_dispatch:
 
 jobs:
   build:
