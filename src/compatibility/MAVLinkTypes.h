@@ -11,19 +11,8 @@
 #define MAV_TYPE_VTOL_QUADROTOR MAV_TYPE_VTOL_TAILSITTER_QUADROTOR
 #endif
 
-// The old reserved types were renamed in newer mavlink - these don't exist anymore
-// Define them to the actual enum values to avoid compilation errors
-#ifndef MAV_TYPE_VTOL_RESERVED2
-#define MAV_TYPE_VTOL_RESERVED2 MAV_TYPE_VTOL_TILTROTOR
-#endif
-
-#ifndef MAV_TYPE_VTOL_RESERVED3
-#define MAV_TYPE_VTOL_RESERVED3 MAV_TYPE_VTOL_FIXEDROTOR
-#endif
-
-#ifndef MAV_TYPE_VTOL_RESERVED4
-#define MAV_TYPE_VTOL_RESERVED4 MAV_TYPE_VTOL_TAILSITTER
-#endif
+// Note: VTOL_RESERVED2/3/4 no longer exist in newer mavlink - do NOT add defines
+// Update your code to use the actual VTOL types instead
 
 // Compatibility for new mavlink manual_control parameters
 // The new mavlink library added more parameters to manual_control
