@@ -77,8 +77,8 @@ jobs:
         fi
         
         export PATH="$QT_ROOT_DIR/bin:$PATH"
+        rm -rf "$PROJDIR/build"
         qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a "CONFIG+=android" SOURCE_DIR=$PROJDIR MAVLINKPATH=$PROJDIR/libs/mavlink $PROJDIR/qgroundcontrol.pro 2>&1 || exit 1
-        make clean || true
         make -j$(nproc) 2>&1 || exit 1
 
     - name: Upload APK
