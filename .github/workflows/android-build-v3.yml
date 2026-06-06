@@ -1,6 +1,6 @@
 # Android CI Build Workflow for DIGS - v3 (fresh trigger)
 
-name: Android Build v3
+name: Android Build Final
 
 on:
   push:
