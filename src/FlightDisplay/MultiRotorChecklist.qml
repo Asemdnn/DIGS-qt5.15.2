@@ -1,10 +1,21 @@
-import QtQuick
-import QtQuick.Controls
-import QtQml.Models
+/****************************************************************************
+ *
+ *   (c) 2009-2016 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
+ *
+ * QGroundControl is licensed according to the terms in the file
+ * COPYING.md in the root of the source code directory.
+ *
+ ****************************************************************************/
+
+import QtQuick                      2.11
+import QtQuick.Controls             2.4
+import QtQml.Models                 2.1
 
 import QGroundControl               1.0
-import QGroundControl.Controls    1.0
-import QGroundControl.FlyView  1.0
+import QGroundControl.ScreenTools   1.0
+import QGroundControl.Controls      1.0
+import QGroundControl.FlightDisplay 1.0
+import QGroundControl.Vehicle       1.0
 
 Item {
     property var model: listModel
@@ -73,3 +84,4 @@ Item {
         }
     }
 }
+
