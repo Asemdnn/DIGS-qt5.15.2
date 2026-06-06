@@ -16,3 +16,6 @@
 [submodule "libs/OpenSSL"]
 	path = libs/OpenSSL
 	url = https://github.com/Auterion/android_openssl.git
+[submodule "libs/eigen"]
+	path = libs/eigen
+	url = https://github.com/eigenteam/eigen-git-mirror.git
