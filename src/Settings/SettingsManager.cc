@@ -11,6 +11,7 @@
 
 #include <QQmlEngine>
 #include <QtQml>
+#include "QGCApplication.h"
 
 SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
