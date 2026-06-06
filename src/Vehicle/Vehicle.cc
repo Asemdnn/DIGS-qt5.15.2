@@ -4006,7 +4006,12 @@ void Vehicle::sendJoystickDataThreadSafe(float roll, float pitch, float yaw, flo
                 static_cast<int16_t>(newRollCommand),
                 static_cast<int16_t>(newThrustCommand),
                 static_cast<int16_t>(newYawCommand),
-                buttons);
+                buttons,
+                0,  // buttons2
+                0,  // enabled_extensions
+                0,  // s (roll/pitch override)
+                0,  // t (thrust override)
+                0, 0, 0, 0, 0, 0);  // aux1-6
     sendMessageOnLinkThreadSafe(sharedLink.get(), message);
 }
 
