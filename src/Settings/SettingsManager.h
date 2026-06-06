@@ -40,6 +40,12 @@ class SettingsManager : public QGCTool
 public:
     SettingsManager(QGCApplication* app, QGCToolbox* toolbox);
 
+    // Singleton accessor - get instance from QGCToolbox
+    static SettingsManager* instance() {
+        QGCToolbox* tb = QGCApplication::instance()->toolbox();
+        return tb ? tb->settingsManager() : nullptr;
+    }
+
 #if defined(QGC_AIRMAP_ENABLED)
     Q_PROPERTY(QObject* airMapSettings                  READ airMapSettings                 CONSTANT)
 #endif

@@ -44,6 +44,12 @@ public:
     MAVLinkProtocol(QGCApplication* app, QGCToolbox* toolbox);
     ~MAVLinkProtocol();
 
+    // Singleton accessor - get instance from QGCToolbox
+    static MAVLinkProtocol* instance() {
+        QGCToolbox* tb = QGCApplication::instance()->toolbox();
+        return tb ? tb->mavlinkProtocol() : nullptr;
+    }
+
     /** @brief Get the human-friendly name of this protocol */
     QString getName();
     /** @brief Get the system id of this application */

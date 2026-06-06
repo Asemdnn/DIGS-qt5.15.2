@@ -46,6 +46,12 @@ public:
     QGCCorePlugin(QGCApplication* app, QGCToolbox* toolbox);
     ~QGCCorePlugin();
 
+    // Singleton accessor - get instance from QGCToolbox
+    static QGCCorePlugin* instance() {
+        QGCToolbox* tb = QGCApplication::instance()->toolbox();
+        return tb ? tb->corePlugin() : nullptr;
+    }
+
     Q_PROPERTY(QVariantList         settingsPages                   READ settingsPages                                  NOTIFY settingsPagesChanged)
     Q_PROPERTY(QVariantList         analyzePages                    READ analyzePages                                   NOTIFY analyzePagesChanged)
     Q_PROPERTY(int                  defaultSettings                 READ defaultSettings                                CONSTANT)

@@ -27,8 +27,7 @@
 
 QGC_LOGGING_CATEGORY(MultiVehicleManagerLog, "Vehicle.MultiVehicleManager")
 
-// Use Q_GLOBAL_STATIC instead of Q_APPLICATION_STATIC (not available in Qt 5.15 Android)
-Q_GLOBAL_STATIC(MultiVehicleManager, _multiVehicleManagerInstance)
+// Manual singleton - Q_APPLICATION_STATIC not available in Qt 5.15 Android
 
 MultiVehicleManager::MultiVehicleManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
@@ -53,7 +52,9 @@ void MultiVehicleManager::setToolbox(QGCToolbox* toolbox)
 
 MultiVehicleManager *MultiVehicleManager::instance()
 {
-    return _multiVehicleManagerInstance();
+    // Singleton accessor - get instance from QGCToolbox
+    QGCToolbox* tb = QGCApplication::instance()->toolbox();
+    return tb ? tb->multiVehicleManager() : nullptr;
 }
 
 void MultiVehicleManager::init()

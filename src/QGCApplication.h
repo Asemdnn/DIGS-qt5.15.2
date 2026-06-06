@@ -79,6 +79,9 @@ public:
     /// @return true: Fake ui into showing mobile interface
     bool fakeMobile(void) const { return _fakeMobile; }
 
+    // Singleton accessor
+    static QGCApplication* instance() { return _app; }
+
     // Still working on getting rid of this and using dependency injection instead for everything
     QGCToolbox* toolbox(void) { return _toolbox; }
 

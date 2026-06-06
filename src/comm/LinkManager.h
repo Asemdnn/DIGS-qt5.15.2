@@ -52,6 +52,12 @@ public:
     LinkManager(QGCApplication* app, QGCToolbox* toolbox);
     ~LinkManager();
 
+    // Singleton accessor - get instance from QGCToolbox
+    static LinkManager* instance() {
+        QGCToolbox* tb = QGCApplication::instance()->toolbox();
+        return tb ? tb->linkManager() : nullptr;
+    }
+
     Q_PROPERTY(bool                 isBluetoothAvailable    READ isBluetoothAvailable   CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  linkConfigurations      READ _qmlLinkConfigurations CONSTANT)
     Q_PROPERTY(QStringList          linkTypeStrings         READ linkTypeStrings        CONSTANT)
