@@ -14,6 +14,7 @@
 
 #include <Eigen/Eigen>
 
+#include "compatibility/MAVLinkTypes.h"
 #include "Vehicle.h"
 #include "MAVLinkProtocol.h"
 #include "FirmwarePluginManager.h"
@@ -4007,7 +4008,9 @@ void Vehicle::sendJoystickDataThreadSafe(float roll, float pitch, float yaw, flo
                 static_cast<int16_t>(newThrustCommand),
                 static_cast<int16_t>(newYawCommand),
                 buttons,
-                0, 0, 0, 0);
+                0,  // buttons2
+                0,  // enabled_extensions
+                0, 0, 0, 0, 0, 0);  // aux1-6
     sendMessageOnLinkThreadSafe(sharedLink.get(), message);
 }
 
