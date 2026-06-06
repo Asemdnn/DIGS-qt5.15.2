@@ -45,11 +45,26 @@ jobs:
       env:
         QT_QPA_PLATFORM: offscreen
       run: |
+        echo "=== Git version ==="
+        git --version
+        
+        echo "=== Remote origin ==="
+        git remote -v
+        
         echo "=== Current commit ==="
         git rev-parse HEAD
         
+        echo "=== Git log last 3 ==="
+        git log --oneline -3
+        
+        echo "=== Git show HEAD ==="
+        git show HEAD --stat
+        
         echo "=== Verify MavlinkSettings.h ==="
         ls -la src/ui/preferences/MavlinkSettings.h
+        
+        echo "=== Verify in git ==="
+        git ls-files src/ui/preferences/MavlinkSettings.h
         
         PROJDIR=$(pwd)
         mkdir -p build
