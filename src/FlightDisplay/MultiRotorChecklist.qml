@@ -2,9 +2,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQml.Models
 
-import QGroundControl
-import QGroundControl.Controls
-import QGroundControl.FlyView
+import QGroundControl               1.0
+import QGroundControl.Controls    1.0
+import QGroundControl.FlyView  1.0
 
 Item {
     property var model: listModel

@@ -2,9 +2,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import QGroundControl
-import QGroundControl.Controls
-import QGroundControl.FlyView
+import QGroundControl               1.0
+import QGroundControl.Controls    1.0
+import QGroundControl.FlyView  1.0
 
 ColumnLayout {
     id: _root

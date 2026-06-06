@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import QGroundControl
+import QGroundControl               1.0
 import QGroundControl.FactControls
 import QGroundControl.Controls
 
