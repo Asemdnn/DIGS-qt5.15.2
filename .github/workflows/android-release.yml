@@ -1,0 +1,72 @@
+# Android CI Build - Release Build
+
+name: Android Release Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Install Android SDK
+      uses: android-actions/setup-android@v2
+
+    - name: Set up Android NDK
+      run: |
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21.4.7075529" || $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;21e"
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '5.15.2'
+        target: 'android'
+        arch: 'android'
+        modules: 'qtcharts'
+
+    - name: Build APK
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: |
+        echo "=== Current commit ==="
+        git rev-parse HEAD
+        
+        echo "=== Verify MavlinkSettings.h ==="
+        ls -la src/ui/preferences/MavlinkSettings.h
+        
+        PROJDIR=$(pwd)
+        mkdir -p build
+        cd build
+        
+        if [ -d "$ANDROID_HOME/ndk/21.4.7075529" ]; then
+          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21.4.7075529
+        elif [ -d "$ANDROID_HOME/ndk/21e" ]; then
+          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21e
+        fi
+        
+        export PATH="$QT_ROOT_DIR/bin:$PATH"
+        qmake -spec android-clang ANDROID_TARGET_ARCH=arm64-v8a SOURCE_DIR=$PROJDIR MAVLINKPATH=$PROJDIR/libs/mavlink $PROJDIR/qgroundcontrol.pro 2>&1 || exit 1
+        make -j$(nproc) 2>&1 || exit 1
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: DIGS-APK
+        path: build/android-build/bin/*.apk
