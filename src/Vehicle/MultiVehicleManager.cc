@@ -15,8 +15,8 @@
 #include "QmlObjectListModel.h"
 #ifdef Q_OS_IOS
 #include "MobileScreenMgr.h"
-#elif defined(Q_OS_ANDROID)
-#include "AndroidInterface.h"
+// #elif defined(Q_OS_ANDROID)
+// #include "AndroidInterface.h"
 #endif
 #include "QGCLoggingCategory.h"
 
@@ -146,7 +146,7 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
     if (_vehicles->count() == 1) {
         qCDebug(MultiVehicleManagerLog) << "keepScreenOn";
         #if defined(Q_OS_ANDROID)
-            AndroidInterface::setKeepScreenOn(true);
+            // AndroidInterface::setKeepScreenOn(true); // Not available
         #elif defined(Q_OS_IOS)
             MobileScreenMgr::setKeepScreenOn(true);
         #endif
@@ -182,7 +182,7 @@ void MultiVehicleManager::_deleteVehiclePhase1(Vehicle *vehicle)
     if (_vehicles->count() == 0) {
         qCDebug(MultiVehicleManagerLog) << "restoreScreenOn";
         #if defined(Q_OS_ANDROID)
-            AndroidInterface::setKeepScreenOn(false);
+            // AndroidInterface::setKeepScreenOn(false); // Not available
         #elif defined(Q_OS_IOS)
             MobileScreenMgr::setKeepScreenOn(false);
         #endif
