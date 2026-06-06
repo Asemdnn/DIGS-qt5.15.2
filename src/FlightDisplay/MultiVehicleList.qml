@@ -5,7 +5,7 @@ import QtQuick.Layouts
 import QGroundControl               1.0
 import QGroundControl.Controls    1.0
 import QGroundControl.FlightMap  1.0
-import QGroundControl.FlyView  1.0
+import QGroundControl.FlightDisplay  1.0
 
 Item {
     property real   _margin:              ScreenTools.defaultFontPixelWidth / 2
