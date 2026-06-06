@@ -3,7 +3,8 @@
 #include "QGCApplication.h"
 #include "ParameterManager.h"
 #include "SettingsManager.h"
-#include "MavlinkSettings.h"
+// Temporarily disabled: MavlinkSettings causes build failures
+// #include "MavlinkSettings.h"
 #include "FirmwareUpgradeSettings.h"
 #include "QGCCorePlugin.h"
 #include "QGCOptions.h"
