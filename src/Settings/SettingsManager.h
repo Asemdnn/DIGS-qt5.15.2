@@ -18,6 +18,7 @@ class QGCToolbox;
 #include "Joystick.h"
 #include "MultiVehicleManager.h"
 #include "QGCToolbox.h"
+#include "QGCApplication.h"
 #include "AppSettings.h"
 #include "UnitsSettings.h"
 #include "AutoConnectSettings.h"

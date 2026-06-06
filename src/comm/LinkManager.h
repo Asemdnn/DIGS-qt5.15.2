@@ -24,6 +24,7 @@ class QGCApplication;
 class QGCToolbox;
 
 #include "QGCToolbox.h"
+#include "QGCApplication.h"
 #include "MAVLinkProtocol.h"
 #if !defined(__mobile__)
 #include "LogReplayLink.h"

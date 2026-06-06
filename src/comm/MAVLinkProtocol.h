@@ -28,6 +28,7 @@ class QGCApplication;
 class QGCToolbox;
 
 #include "QGCToolbox.h"
+#include "QGCApplication.h"
 
 Q_DECLARE_LOGGING_CATEGORY(MAVLinkProtocolLog)
 
