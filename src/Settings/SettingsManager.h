@@ -10,7 +10,7 @@
 #ifndef SettingsManager_H
 #define SettingsManager_H
 
-// Forward declarations to avoid circular includes
+// Forward declarations - must come before QGCToolbox.h
 class QGCApplication;
 class QGCToolbox;
 

@@ -18,6 +18,11 @@
 #include "LinkConfiguration.h"
 #include "LinkInterface.h"
 #include "QGCLoggingCategory.h"
+
+// Forward declarations - must come before QGCToolbox.h
+class QGCApplication;
+class QGCToolbox;
+
 #include "QGCToolbox.h"
 #include "MAVLinkProtocol.h"
 #if !defined(__mobile__)

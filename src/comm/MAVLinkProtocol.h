@@ -22,12 +22,12 @@
 #include "QGCMAVLink.h"
 #include "QGC.h"
 #include "QGCTemporaryFile.h"
-#include "QGCToolbox.h"
 
-class LinkManager;
-class MultiVehicleManager;
+// Forward declarations - must come before QGCToolbox.h
 class QGCApplication;
 class QGCToolbox;
+
+#include "QGCToolbox.h"
 
 Q_DECLARE_LOGGING_CATEGORY(MAVLinkProtocolLog)
 
