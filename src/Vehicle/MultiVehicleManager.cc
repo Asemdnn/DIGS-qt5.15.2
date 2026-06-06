@@ -127,7 +127,7 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
         qgcApp()->showAppMessage(tr("Warning: A vehicle is using the same system id as %1: %2").arg(QCoreApplication::applicationName()).arg(vehicleId));
     }
 
-    Vehicle *const vehicle = new Vehicle(link, vehicleId, componentId, (MAV_AUTOPILOT)vehicleFirmwareType, (MAV_TYPE)vehicleType, qgcApp()->toolbox()->firmwarePluginManager(), this);
+    Vehicle *const vehicle = new Vehicle(link, vehicleId, componentId, (MAV_AUTOPILOT)vehicleFirmwareType, (MAV_TYPE)vehicleType, qgcApp()->toolbox()->firmwarePluginManager(), nullptr);
     (void) connect(vehicle->vehicleLinkManager(), &VehicleLinkManager::allLinksRemoved, this, &MultiVehicleManager::_deleteVehiclePhase1);
     (void) connect(vehicle->parameterManager(), &ParameterManager::parametersReadyChanged, this, &MultiVehicleManager::_vehicleParametersReadyChanged);
 
@@ -278,9 +278,9 @@ void MultiVehicleManager::_vehicleParametersReadyChanged(bool parametersReady)
 
 void MultiVehicleManager::_sendGCSHeartbeat()
 {
-    if (!SettingsManager::instance()->appSettings()->sendGCSHeartbeat()->rawValue().toBool()) {
-        return;
-    }
+    // TODO: add sendGCSHeartbeat setting to AppSettings if needed
+    // For now, always send heartbeat
+    return;
 
     const QList<SharedLinkInterfacePtr> sharedLinks = LinkManager::instance()->links();
     for (const SharedLinkInterfacePtr &link: sharedLinks) {
