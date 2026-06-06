@@ -10,15 +10,10 @@
 #ifndef SettingsManager_H
 #define SettingsManager_H
 
-// Forward declarations - must come before QGCToolbox.h
-class QGCApplication;
-class QGCToolbox;
-
 #include "QGCLoggingCategory.h"
 #include "Joystick.h"
 #include "MultiVehicleManager.h"
 #include "QGCToolbox.h"
-#include "QGCApplication.h"
 #include "AppSettings.h"
 #include "UnitsSettings.h"
 #include "AutoConnectSettings.h"
@@ -45,11 +40,8 @@ class SettingsManager : public QGCTool
 public:
     SettingsManager(QGCApplication* app, QGCToolbox* toolbox);
 
-    // Singleton accessor - get instance from QGCToolbox
-    static SettingsManager* instance() {
-        QGCToolbox* tb = QGCApplication::instance()->toolbox();
-        return tb ? tb->settingsManager() : nullptr;
-    }
+    // Singleton accessor - implementation in SettingsManager.cc
+    static SettingsManager* instance();
 
 #if defined(QGC_AIRMAP_ENABLED)
     Q_PROPERTY(QObject* airMapSettings                  READ airMapSettings                 CONSTANT)

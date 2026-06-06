@@ -524,3 +524,9 @@ void MAVLinkProtocol::deleteTempLogFiles(void)
     }
 }
 
+MAVLinkProtocol* MAVLinkProtocol::instance()
+{
+    QGCToolbox* tb = QGCApplication::instance()->toolbox();
+    return tb ? tb->mavlinkProtocol() : nullptr;
+}
+

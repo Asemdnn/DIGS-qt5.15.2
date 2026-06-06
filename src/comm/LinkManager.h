@@ -24,16 +24,12 @@ class QGCApplication;
 class QGCToolbox;
 
 #include "QGCToolbox.h"
-#include "QGCApplication.h"
 #include "MAVLinkProtocol.h"
 #if !defined(__mobile__)
 #include "LogReplayLink.h"
 #include "UdpIODevice.h"
 #endif
 #include "QmlObjectListModel.h"
-
-class QGCApplication;
-class QGCToolbox;
 
 #ifndef NO_SERIAL_LINK
     #include "SerialLink.h"
@@ -61,11 +57,8 @@ public:
     LinkManager(QGCApplication* app, QGCToolbox* toolbox);
     ~LinkManager();
 
-    // Singleton accessor - get instance from QGCToolbox
-    static LinkManager* instance() {
-        QGCToolbox* tb = QGCApplication::instance()->toolbox();
-        return tb ? tb->linkManager() : nullptr;
-    }
+    // Singleton accessor - implementation in LinkManager.cc
+    static LinkManager* instance();
 
     Q_PROPERTY(bool                 isBluetoothAvailable    READ isBluetoothAvailable   CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  linkConfigurations      READ _qmlLinkConfigurations CONSTANT)

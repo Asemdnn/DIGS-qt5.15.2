@@ -500,3 +500,9 @@ QString QGCCorePlugin::firstRunPromptResource(int id)
 
     return QString();
 }
+
+QGCCorePlugin* QGCCorePlugin::instance()
+{
+    QGCToolbox* tb = QGCApplication::instance()->toolbox();
+    return tb ? tb->corePlugin() : nullptr;
+}

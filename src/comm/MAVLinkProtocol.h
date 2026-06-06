@@ -23,12 +23,7 @@
 #include "QGC.h"
 #include "QGCTemporaryFile.h"
 
-// Forward declarations - must come before QGCToolbox.h
-class QGCApplication;
-class QGCToolbox;
-
 #include "QGCToolbox.h"
-#include "QGCApplication.h"
 
 Q_DECLARE_LOGGING_CATEGORY(MAVLinkProtocolLog)
 
@@ -46,11 +41,8 @@ public:
     MAVLinkProtocol(QGCApplication* app, QGCToolbox* toolbox);
     ~MAVLinkProtocol();
 
-    // Singleton accessor - get instance from QGCToolbox
-    static MAVLinkProtocol* instance() {
-        QGCToolbox* tb = QGCApplication::instance()->toolbox();
-        return tb ? tb->mavlinkProtocol() : nullptr;
-    }
+    // Singleton accessor - implementation in MAVLinkProtocol.cc
+    static MAVLinkProtocol* instance();
 
     /** @brief Get the human-friendly name of this protocol */
     QString getName();

@@ -61,3 +61,9 @@ void SettingsManager::setToolbox(QGCToolbox *toolbox)
     _airMapSettings =               new AirMapSettings          (this);
 #endif
 }
+
+SettingsManager* SettingsManager::instance()
+{
+    QGCToolbox* tb = QGCApplication::instance()->toolbox();
+    return tb ? tb->settingsManager() : nullptr;
+}

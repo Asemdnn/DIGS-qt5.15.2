@@ -904,3 +904,9 @@ bool LinkManager::_isSerialPortConnected(void)
 #endif
     return false;
 }
+
+LinkManager* LinkManager::instance()
+{
+    QGCToolbox* tb = QGCApplication::instance()->toolbox();
+    return tb ? tb->linkManager() : nullptr;
+}
