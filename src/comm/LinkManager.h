@@ -26,6 +26,9 @@
 #endif
 #include "QmlObjectListModel.h"
 
+class QGCApplication;
+class QGCToolbox;
+
 #ifndef NO_SERIAL_LINK
     #include "SerialLink.h"
 #endif

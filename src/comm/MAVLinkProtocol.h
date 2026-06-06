@@ -27,6 +27,7 @@
 class LinkManager;
 class MultiVehicleManager;
 class QGCApplication;
+class QGCToolbox;
 
 Q_DECLARE_LOGGING_CATEGORY(MAVLinkProtocolLog)
 

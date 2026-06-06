@@ -10,6 +10,10 @@
 #ifndef SettingsManager_H
 #define SettingsManager_H
 
+// Forward declarations to avoid circular includes
+class QGCApplication;
+class QGCToolbox;
+
 #include "QGCLoggingCategory.h"
 #include "Joystick.h"
 #include "MultiVehicleManager.h"
